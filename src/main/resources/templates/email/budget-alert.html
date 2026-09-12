@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .card { background: #ffffff; padding: 20px; border-radius: 8px; border-left: 5px solid #e74c3c; }
+        .title { color: #e74c3c; font-size: 20px; font-weight: bold; }
+        .details { margin-top: 15px; font-size: 14px; color: #333333; }
+        .footer { margin-top: 20px; font-size: 12px; color: #777777; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="title">⚠️ Budget Exceeded Alert</div>
+    <div class="details">
+        <p>Hello,</p>
+        <p>You have exceeded your monthly spending limit for the <strong><span th:text="${category}">Category</span></strong> category.</p>
+        <ul>
+            <li><strong>Monthly Limit:</strong> $<span th:text="${limit}">0.00</span></li>
+            <li><strong>Total Spent:</strong> $<span th:text="${spent}">0.00</span></li>
+        </ul>
+        <p>Please review your recent transactions in the Expense Tracker.</p>
+    </div>
+    <div class="footer">
+        Automated alert from Smart Expense Tracker System.
+    </div>
+</div>
+</body>
+</html>
