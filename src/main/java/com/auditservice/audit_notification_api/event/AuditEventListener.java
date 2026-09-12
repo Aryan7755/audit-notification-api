@@ -18,7 +18,8 @@ public class AuditEventListener {
     @Async("taskExecutor")
     @EventListener
     public void handleExpenseCreated(ExpenseCreatedEvent event) {
-        log.info("Processing ExpenseCreatedEvent on thread: {}", Thread.currentThread().getName());
+        log.info("EVENT-RECEIVED [Thread: {}]: Action=EXPENSE_CREATED, TargetUser={}",
+                Thread.currentThread().getName(), event.getUserEmail());
 
         String details = String.format("Created expense '%s' of amount %s in category '%s'",
                 event.getTitle(), event.getAmount(), event.getCategory());
@@ -30,12 +31,14 @@ public class AuditEventListener {
                 .build();
 
         auditLogRepository.save(auditLog);
+        log.info("AUDIT-PERSISTED [LogID: {}]: Successfully recorded expense creation", auditLog.getId());
     }
 
     @Async("taskExecutor")
     @EventListener
     public void handleBudgetExceeded(BudgetExceededEvent event) {
-        log.info("Processing BudgetExceededEvent on thread: {}", Thread.currentThread().getName());
+        log.info("EVENT-RECEIVED [Thread: {}]: Action=BUDGET_EXCEEDED, TargetUser={}",
+                Thread.currentThread().getName(), event.getUserEmail());
 
         String details = String.format("Exceeded limit for '%s': Spent %s out of limit %s",
                 event.getCategory(), event.getCurrentSpent(), event.getMonthlyLimit());
@@ -47,5 +50,6 @@ public class AuditEventListener {
                 .build();
 
         auditLogRepository.save(auditLog);
+        log.info("AUDIT-PERSISTED [LogID: {}]: Successfully recorded budget threshold breach", auditLog.getId());
     }
 }

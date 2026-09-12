@@ -13,10 +13,12 @@ public class WeeklyDigestScheduler {
 
     private final AuditLogRepository auditLogRepository;
 
-
     @Scheduled(cron = "0 0 0 * * SUN")
     public void generateWeeklyDigest() {
+        log.info("CRON-START [WeeklyDigestScheduler]: Initiating weekly audit log aggregation...");
+
         long logCount = auditLogRepository.count();
-        log.info("CRON JOB EXECUTED: Weekly Digest - Total audit entries processed: {}", logCount);
+
+        log.info("CRON-COMPLETE [WeeklyDigestScheduler]: Total audit records processed: {}", logCount);
     }
 }
