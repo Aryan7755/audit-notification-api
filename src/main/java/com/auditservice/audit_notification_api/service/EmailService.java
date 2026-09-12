@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -21,6 +22,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
+
     @Retryable(
             retryFor = { MessagingException.class, Exception.class },
             maxAttempts = 3,
@@ -45,5 +47,10 @@ public class EmailService {
 
         mailSender.send(message);
         log.info("Budget alert email successfully sent to: {}", recipient);
+    }
+
+    @Recover
+    public void recoverBudgetAlertEmail(Exception e, String recipient, String category, BigDecimal limit, BigDecimal spent) {
+        log.error("ALL RETRIES EXHAUSTED for sending mail to {}. Cause: {}", recipient, e.getMessage());
     }
 }
